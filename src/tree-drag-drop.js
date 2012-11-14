@@ -42,30 +42,6 @@
 		handleDraggableStop: function (e, o) {
 			debug("handleDraggableStop");
 			
-			
-			var	target = $(e.target),
-				marker = $.treeDragDrop.defaults.marker,
-				ctx = target.data("tddCtx");
-			
-			target.removeClass($.treeDragDrop.defaults.selectedClass);
-			
-			setTimeout(function () {	
-				marker.before(target);				
-				if (target.parent().is("li")) {					
-					target.wrap("<ul></ul>");				
-				}	
-								
-				marker.detach();
-				$("ul", ctx).each(function () {
-					if ($(this).children("li").length === 0) {
-						$(this).remove();
-					}
-				});	
-				$("li", ctx).has("ul").not("li." + $.treeDragDrop.defaults.collapsedClass).addClass($.treeDragDrop.defaults.expandedClass);
-				$("li", ctx).not("li:has(ul)").removeClass($.treeDragDrop.defaults.expandedClass).removeClass($.treeDragDrop.defaults.collapsedClass);
-			}, 100);
-			
-			$("li", ctx).unbind("mousemove");
 		},
 		
 		handleDroppableOut: function (e, o) {
@@ -83,43 +59,68 @@
 					threshhold = $.treeDragDrop.defaults.inFolderThreshhold;
 					
 						
-				if (!$(target).is("li")) {			
-					return false;			
-				}
-				
-				if (target.find("ul").length !== 0) {
-					threshhold = Math.min($.treeDragDrop.defaults.inFolderThreshhold * (target.find("ul").length + 1), target.width() * 0.75);
-				}
-				
-				marker.removeClass("tdd-append", "tdd-before", "tdd-after");
-				if (x > threshhold) {
-					marker.addClass("tdd-append");
-					//debug("parents: " + target.parents("."+selectedClass).length )
-					if (target.is("li") && target.children("ul").length !== 0) {
-						if (!target.hasClass(selectedClass) && target.parents("." + selectedClass).length === 0) {
-							target.children("ul").append(marker);
-						} else {
-							marker.detach();
-						}
-					} else {
-						if (!target.hasClass(selectedClass) && target.parents("." + selectedClass).length === 0) {
-							target.append(marker);
-						} else {
-							marker.detach();
-						}
+				if ($(target).is("li")) {			
+					if (target.find("ul").length !== 0) {
+						threshhold = Math.min($.treeDragDrop.defaults.inFolderThreshhold * (target.find("ul").length + 1), target.width() * 0.75);
 					}
 					
-				} else if (y < target.height() / 2) {
-					marker.addClass("tdd-before");
-					target.before(marker);
-				} else {
-					marker.addClass("tdd-after");
-					target.after(marker);
+					marker.removeClass("tdd-append", "tdd-before", "tdd-after");
+					if (x > threshhold) {
+						marker.addClass("tdd-append");
+						//debug("parents: " + target.parents("."+selectedClass).length )
+						if (target.is("li") && target.children("ul").length !== 0) {
+							if (!target.hasClass(selectedClass) && target.parents("." + selectedClass).length === 0) {
+								target.children("ul").append(marker);
+							} else {
+								marker.detach();
+							}
+						} else {
+							if (!target.hasClass(selectedClass) && target.parents("." + selectedClass).length === 0) {
+								target.append(marker);
+							} else {
+								marker.detach();
+							}
+						}
+						
+					} else if (y < target.height() / 2) {
+						marker.addClass("tdd-before");
+						target.before(marker);
+					} else {
+						marker.addClass("tdd-after");
+						target.after(marker);
+					}
 				}
-			});		
+				e.stopImmediatePropagation();	
+			});
+			
 		},
 		
 		handleDroppableDrop: function (e, o) {
+			debug("handleDroppableDrop");
+			
+			var	target = $(o.draggable),
+				marker = $.treeDragDrop.defaults.marker,
+				ctx = target.data("tddCtx");
+			
+			target.removeClass($.treeDragDrop.defaults.selectedClass);
+			
+				
+			marker.before(target);				
+			if (target.parent().is("li")) {					
+				target.wrap("<ul></ul>");				
+			}	
+							
+			marker.detach();
+			$("ul", ctx).each(function () {
+				if ($(this).children("li").length === 0) {
+					$(this).remove();
+				}
+			});	
+			$("li", ctx).has("ul").not("li." + $.treeDragDrop.defaults.collapsedClass).addClass($.treeDragDrop.defaults.expandedClass);
+			$("li", ctx).not("li:has(ul)").removeClass($.treeDragDrop.defaults.expandedClass).removeClass($.treeDragDrop.defaults.collapsedClass);
+			
+			
+			$("li", ctx).unbind("mousemove");
 			
 		},
 		
@@ -150,8 +151,7 @@
 			var $el = $(this),
 				data = $el.data('treeDragDrop');
 
-			if (!data) {				
-				
+			if (!data) {	
 				$("li", $el).draggable({ 
 					addClasses: false,
 					cursorAt:  $.treeDragDrop.defaults.cursorAt,
@@ -166,15 +166,13 @@
 				}).droppable({
 					greedy: true,
 					tolerance: "pointer",
-					//drop: $.treeDragDrop.handlers.handleDroppableDrop,
+					drop: $.treeDragDrop.handlers.handleDroppableDrop,
 					over: $.treeDragDrop.handlers.handleDroppableOver,
 					out: $.treeDragDrop.handlers.handleDroppableOut
 					
 				}).bind("click", $.treeDragDrop.handlers.handleClick).data("tddCtx", $el).has("ul").addClass($.treeDragDrop.defaults.expandedClass);
 				
-				$el.data('treeDragDrop', {inited: true});
-				
-				
+				$el.data('treeDragDrop', {inited: true});				
 			}				
 		});
 	};

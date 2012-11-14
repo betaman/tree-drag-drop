@@ -27,6 +27,11 @@ li.ui-draggable-dragging, .ui-draggable-dragging li{
 .treeDragDrop ul, .tdd-dragContainer ul{
 	margin:0;
 	padding:0;
+	
+	-moz-user-select: none; 
+	-khtml-user-select: none; 
+    -webkit-user-select: none; 
+    -o-user-select: none; 
 }
 
 .treeDragDrop li, .tdd-dragContainer li{
@@ -34,6 +39,11 @@ li.ui-draggable-dragging, .ui-draggable-dragging li{
 	margin:5px 0;
 	padding:10px 10px 10px 25px;
 	border:dashed #999 1px;
+	
+	-moz-user-select: none; 
+	-khtml-user-select: none; 
+    -webkit-user-select: none; 
+    -o-user-select: none; 
 }
 
 .treeDragDrop .tdd-after, .treeDragDrop .tdd-before, .treeDragDrop .tdd-append{
