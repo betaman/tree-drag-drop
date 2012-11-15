@@ -10,7 +10,7 @@
 			selectedClass: "tdd-selected",
 			collapsedClass: "tdd-collapsed",
 			expandedClass: "tdd-expanded",
-			inFolderThreshhold: 50,
+			inFolderThreshhold: 100,
 			cursorAt: {top: -30}, 
 			dragContainer: $('<div class="tdd-dragContainer" />'),			
 			marker: $('<div />'),
@@ -58,6 +58,68 @@
 		
 	}
 	
+	function getClosestItem(ctx, y){
+		var dy, 
+			closest = null, 
+			cursorAt = $.treeDragDrop.defaults.cursorAt;
+		
+		$("li", ctx).each(function(){
+			var testDy = (y + cursorAt.top) - ($(this).offset().top + $(this).height()/2);
+			if( isNaN(dy) || Math.abs(testDy) < dy) { 
+				dy = testDy;
+				closest = $(this);
+			}
+		})
+		
+		debug("closest id: " + closest.attr("id") + " " + dy)
+		return closest;
+	}
+	
+	function setMarker(el, ctx, pos){
+		
+		var marker = $.treeDragDrop.defaults.marker,
+			threshhold = $.treeDragDrop.defaults.inFolderThreshhold,
+			selectedClass =  $.treeDragDrop.defaults.selectedClass,
+			ulChildren = $("ul", el).length;
+		
+		marker.removeClass("tdd-append", "tdd-before", "tdd-after");
+		
+		if (el === null) {
+			if (ctx.hasClass("tdd-tree")) {
+				marker.addClass("tdd-append");
+				ctx.append(marker);
+			} else {
+				marker.detach();
+			}
+			
+		} else {
+					
+			if (ulChildren !== 0) {
+				threshhold = Math.min(threshhold * (ulChildren + 1), el.width() * 0.75);
+			}
+			
+			if (el.hasClass(selectedClass) || el.parents("." + selectedClass).length !== 0) {
+				marker.detach();
+			} else {
+			
+				if (pos.x - el.offset().left > threshhold) {
+					if (el.children("ul").length === 0) {
+						el.append(marker);
+					}else{
+						el.children("ul").append(marker);
+					}
+				
+				} else if (pos.y < el.height() / 2) {
+					marker.addClass("tdd-before");
+					el.before(marker);
+				} else {
+					marker.addClass("tdd-after");
+					el.after(marker);
+				}
+			}
+		}		
+	}
+	
 	// handlers	
 		
 	$.treeDragDrop.handlers = {
@@ -68,7 +130,20 @@
 		},
 		
 		handleDraggableDrag: function (e, o) {
-			debug("handleDraggableDrag");						
+			debug("handleDraggableDrag");	
+			
+			var	marker = $.treeDragDrop.defaults.marker,
+				draggable = $(e.target),
+				ctx = draggable.data("tddCtx"),
+				listItem,	
+				tree = $(".tdd-tree", ctx),
+				listItem = getClosestItem(tree, e.pageY);
+					
+			if (listItem) {
+				setMarker(listItem, tree, {x: e.pageX, y: e.pageY});
+			}	
+			
+			e.stopImmediatePropagation();					
 		},
 		
 		handleDraggableStop: function (e, o) {
@@ -77,66 +152,17 @@
 		},
 		
 		handleDroppableOut: function (e, o) {
-			$(e.target).unbind("mousemove");
+			debug("handleDroppableOut");
+			//$(e.target).unbind("mousemove");
 		},
 		
 		handleDroppableOver: function (e, o) {
+			debug("handleDroppableOver");
+			var ctx = o.draggable.data("tddCtx");
 			
-			var	marker = $.treeDragDrop.defaults.marker;		
-			
-			if($(e.target).is("li")){
-				
-				$(e.target).bind("mousemove", function (mme) {
-					
-					var target = $(mme.target),
-						selectedClass = $.treeDragDrop.defaults.selectedClass,
-						x = mme.pageX - mme.target.offsetLeft,
-						y = mme.pageY - mme.target.offsetTop,
-						threshhold = $.treeDragDrop.defaults.inFolderThreshhold;
-					
-					if (target.find("ul").length !== 0) {
-						threshhold = Math.min($.treeDragDrop.defaults.inFolderThreshhold * (target.find("ul").length + 1), target.width() * 0.75);
-					}
-					marker.removeClass("tdd-append", "tdd-before", "tdd-after");
-					
-					if (x > threshhold) {
-						marker.addClass("tdd-append");
-						//debug("parents: " + target.parents("."+selectedClass).length )
-						if (target.is("li") && target.children("ul").length !== 0) {
-							if (!target.hasClass(selectedClass) && target.parents("." + selectedClass).length === 0) {
-								target.children("ul").append(marker);
-							} else {
-								marker.detach();
-							}
-						} else {
-							if (!target.hasClass(selectedClass) && target.parents("." + selectedClass).length === 0) {
-								target.append(marker);
-							} else {
-								marker.detach();
-							}
-						}
-						
-					} else if (y < target.height() / 2) {
-						marker.addClass("tdd-before");
-						target.before(marker);
-					} else {
-						marker.addClass("tdd-after");
-						target.after(marker);
-					}
-					
-					e.stopImmediatePropagation();
-				});
-			
-			} else if ($(e.target).hasClass("tdd-tree") && $(".tdd-tree").children().length === 0){
-					
-				debug ("tree");
-				marker.removeClass("tdd-append", "tdd-before", "tdd-after");
-				marker.addClass("tdd-append");
-				$(e.target).append(marker);
-				
-			}
-			
-			
+			 if ( $(e.target).hasClass("tdd-trashbin") ) {
+				$(".tdd-trashbin", ctx).addClass("highlight")
+			}		
 		},
 		
 		handleDroppableDrop: function (e, o) {
@@ -148,35 +174,33 @@
 				marker = $.treeDragDrop.defaults.marker,
 				ctx = draggable.data("tddCtx"),
 				tree = $(".tdd-tree", ctx);
-			
-			debug("handleDroppableDrop: dropable: " + dropable);
-				
+									
 			draggable.removeClass($.treeDragDrop.defaults.selectedClass);
 			
-			if (dropable.parents(".tdd-trashbin").length !== 0 || dropable.hasClass("tdd-trashbin")) {
+			if (dropable.hasClass("tdd-trashbin")) {
 				$("li", draggable).each(function(index, value){
 					$(".tdd-trashbin").append(value)
 				})
 				$(".tdd-trashbin").append(draggable)	
-			} else if(dropable.hasClass("tdd-tree") && $(".tdd-tree").children().length === 0) {
-				$(".tdd-tree").append(draggable)
-			}else{				
+			} else{				
 				marker.before(draggable);				
 				if (draggable.parent().is("li")) {					
 					draggable.wrap("<ul></ul>");				
 				}
 			}
-			
+						
 			marker.detach();
-			$("ul", ctx).each(function () {
-				if ($(this).children("li").length === 0 && !$(this).hasClass("tdd-trashbin") && !$(this).hasClass("tdd-tree")) {
+			
+			$(".tdd-trashbin ul, .tdd-tree ul", ctx).each(function () {
+				if ($(this).children("li").length === 0) {
 					$(this).remove();
 				}
 			});	
+			
 			$("li", ctx).has("ul").not("li." + $.treeDragDrop.defaults.collapsedClass).addClass($.treeDragDrop.defaults.expandedClass);
 			$("li", ctx).not("li:has(ul)").removeClass($.treeDragDrop.defaults.expandedClass).removeClass($.treeDragDrop.defaults.collapsedClass);
 						
-			$("li, .tdd-tree", ctx).unbind("mousemove");
+			$(".tdd-trashbin, .tdd-tree", ctx).unbind("mousemove");
 			
 			
 			if( $.treeDragDrop.defaults.updateUrl !== null ){
@@ -227,28 +251,17 @@
 					delay: 300,
 					//create: $.treeDragDrop.handlers.handleDraggableCreate,
 					start: $.treeDragDrop.handlers.handleDraggableStart,
-					//drag: $.treeDragDrop.handlers.handleDraggableDrag,
+					drag: $.treeDragDrop.handlers.handleDraggableDrag,
 					stop: $.treeDragDrop.handlers.handleDraggableStop
-				}).droppable({
-					addClasses: false,
-					greedy: true,
-					tolerance: "pointer",
-					drop: $.treeDragDrop.handlers.handleDroppableDrop,
-					over: $.treeDragDrop.handlers.handleDroppableOver,
-					out: $.treeDragDrop.handlers.handleDroppableOut
-					
 				}).bind("click", $.treeDragDrop.handlers.handleClick).data("tddCtx", $el).has("ul").addClass($.treeDragDrop.defaults.expandedClass);
 				
 				$(".tdd-tree, .tdd-trashbin", $el).droppable({
 					addClasses: false,				
 					tolerance: "pointer",
-					drop: $.treeDragDrop.handlers.handleDroppableDrop				
-				}).bind("onselectstart", function(){return false}).attr("unselectable", "on");
-				
-				$(".tdd-tree", $el).droppable({
+					drop: $.treeDragDrop.handlers.handleDroppableDrop,
 					over: $.treeDragDrop.handlers.handleDroppableOver,
-					out: $.treeDragDrop.handlers.handleDroppableOut
-				});
+					out: $.treeDragDrop.handlers.handleDroppableOut			
+				}).bind("onselectstart", function(){return false}).attr("unselectable", "on");
 				
 				$el.data('treeDragDrop', {inited: true});				
 			}				
