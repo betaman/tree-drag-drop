@@ -14,19 +14,22 @@
 
 <body>
 <div class="wrapper">
-<ul class="treeDragDrop" unselectable="on" onselectstart="return false">
-	<li>Item 1
-		<ul>
-			<li>Item 1.1</li>
-			<li>Item 1.2</li>
-			<li>Item 1.3</li>
-			<li>Item 1.4</li>
+	<div class="treeDragDrop">
+		<ul class="tdd-tree">
+			<li id="index1">Item 1
+				<ul>
+					<li id="index1.1">Item 1.1</li>
+					<li id="index1.2">Item 1.2</li>
+					<li id="index1.3">Item 1.3</li>
+					<li id="index1.4">Item 1.4</li>
+				</ul>
+			</li>	
+			<li id="index2">Item 2</li>
+			<li id="index3">Item 3</li>
+			<li id="index4">Item 4</li>
 		</ul>
-	</li>	
-	<li>Item 2</li>
-	<li>Item 3</li>
-	<li>Item 4</li>
-</ul>
+		<ul class="tdd-trashbin"></ul>
+	</div>	
 </div>
 <script src="../lib/jquery-1.8.2.min.js" type="text/javascript"></script>
 <script src="../lib/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>

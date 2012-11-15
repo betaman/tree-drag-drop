@@ -65,3 +65,12 @@ li.ui-draggable-dragging, .ui-draggable-dragging li{
 	z-index:999;
 }
 
+.tdd-trashbin{
+	background:#666;
+	border:dashed #999 1px;
+	min-height:50px;
+}
+
+.tdd-tree{
+	min-height:50px;
+}
