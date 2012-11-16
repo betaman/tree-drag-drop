@@ -118,7 +118,7 @@ if (typeof String.prototype.trim !== 'function') {
 							// append to ul if there is one
 							if (target.is("li") && target.children("ul").length !== 0) {
 								target.children("ul").append(marker);
-							} else {
+							} else if (target.is("li")) {
 								target.append(marker);
 							}
 						// place before item	
@@ -141,7 +141,10 @@ if (typeof String.prototype.trim !== 'function') {
 				marker.removeClass("tdd-append", "tdd-before", "tdd-after");
 				marker.addClass("tdd-append");
 				$(e.target).append(marker);
-			}	
+			} else if ($(e.target).hasClass("tdd-trashbin")) {
+				debug("trashbin");
+				marker.detach();
+			}
 			
 			//e.stopImmediatePropagation();		
 		},
@@ -242,7 +245,7 @@ if (typeof String.prototype.trim !== 'function') {
 					helper: "clone",
 					appendTo: "body",
 					opacity: 0.2,
-					delay: 300,
+					delay: 10,
 					//create: $.treeDragDrop.handlers.handleDraggableCreate,
 					start: $.treeDragDrop.handlers.handleDraggableStart,
 					//drag: $.treeDragDrop.handlers.handleDraggableDrag,
@@ -265,14 +268,11 @@ if (typeof String.prototype.trim !== 'function') {
 				$(".tdd-tree, .tdd-trashbin", $el).droppable({
 					addClasses: false,				
 					tolerance: "pointer",
-					drop: $.treeDragDrop.handlers.handleDroppableDrop				
-				}).bind("onselectstart", function () {return false; }).attr("unselectable", "on");
-				
-				$(".tdd-tree", $el).droppable({
+					drop: $.treeDragDrop.handlers.handleDroppableDrop,
 					over: $.treeDragDrop.handlers.handleDroppableOver,
-					out: $.treeDragDrop.handlers.handleDroppableOut
-				});
-				
+					out: $.treeDragDrop.handlers.handleDroppableOut				
+				}).bind("onselectstart", function () {return false; }).attr("unselectable", "on");
+								
 				$el.data('treeDragDrop', {inited: true});				
 			}				
 		});
