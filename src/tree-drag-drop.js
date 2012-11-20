@@ -78,9 +78,10 @@ if (typeof String.prototype.trim !== 'function') {
 		var ajaxData, 
 			treeData = serializeTree(tree);
 		
+		debug(treeData)
+		
 		if (updateUrl !== null) {
 			ajaxData = {tree: treeData};
-			debug(ajaxData);
 			$.post(updateUrl, ajaxData, function (res) {
 				//console.log (res.data.msg);
 				//TODO: error handling
