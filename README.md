@@ -25,64 +25,92 @@ Options
 
 defaults: "tdd-selected"
 
+the css classname of the draggable while it is dragged around
+
 
 * collapsedClass
 
 defaults: "tdd-collapsed"
+
+the css classname of the listitem while it contains other items and is not expanded
 
 
 * expandedClass
 
 defaults: "tdd-expanded"
 
+the css classname of the listitem while it contains other items and is expanded
 
-* appendClass
+
+**appendClass**
 
 defaults: "tdd-append" 
 
+the css classname of the marker while it is indicating that the draggable should be dropped into an other listitem
 
-* beforeClass
+*Is not completly  implemented yet*
+
+
+**beforeClass**
 
 defaults: "tdd-before"
 
+the css classname of the marker while it is indicating that the draggable should be dropped before an other listitem
 
-* afterClass
+
+**afterClass**
 
 defaults: "tdd-after"
 
+the css classname of the marker while it is indicating that the draggable should be dropped after an other listitem
 
-* inFolderThreshhold
+
+**inFolderThreshhold**
 
 defaults: 100
 
+The extra indent for the marker to indicate weather the draggable is dropped into an listitem or next to it
 
-* cursorAt
+*Is not completly implemented yet*
+
+
+**cursorAt**
 
 defaults: {left: 10, top: -40}
 
+The positioning relative to the mouse of the draggable representaion see: http://api.jqueryui.com/draggable/#option-cursorAt
 
-* dragContainer
+
+**dragContainer**
 
 defaults: $('<div class="tdd-dragContainer" />'),			
 
-
-* marker
-
-defaults: $('<div />'),
+The container in which the draggable representaion will be palced, while beeing dragged about
 
 
-* attributes
+**marker**
+
+defaults: `$('<div />')`
+
+The marker which indicates where the draggable will be dropped
+
+
+**attributes**
 
 defaults: ["id", "class"]
 
+the attributes of you listitems `<li>` which will be passed to the JSON for updating purposes.
 
-* getUrl
+
+**getUrl**
 
 defaults: null
 
-Pass a url, to retrieve a JSON. A tree will be constructed from that JSON. Is not implemented yet 
+Url, to retrieve a JSON. A tree will be constructed from that JSON. Is not implemented yet.
 
 
-* updateUrl
+**updateUrl**
 
-defaults: null		
+defaults: null	
+	
+Url to pass a JSON to, in order update the data from your tree in the Backend
