@@ -6,15 +6,16 @@ A drag and drop tree control depending on jQuery
 Usage
 -----
 
-$('.selector').treeDragDrop(options); 
+    $('.selector').treeDragDrop(options); 
 
 
-For Example:
-$('.treeDragDrop').treeDragDrop({
+For example:
+
+    $('.treeDragDrop').treeDragDrop({
 	collapsedClass: "icon-folder-close", 
 	expandedClass: "icon-folder-open", 
 	updateUrl: "/navigation/api/update"
-}); 
+    }); 
 
 
 Options
