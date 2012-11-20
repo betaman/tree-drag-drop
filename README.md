@@ -1,7 +1,7 @@
 tree-drag-drop
 ==============
 
-A drag and drop tree control depending on jQuery
+A drag and drop tree control depending on jQuery and jQuery ui
 
 Usage
 -----
@@ -24,19 +24,19 @@ Options
 
 **selectedClass** (defaults: `"tdd-selected"`)
 
-the css classname of the draggable while it is dragged around
+The css classname of the draggable while it is dragged around
 
 * * *
 
 **collapsedClass** (defaults: `"tdd-collapsed"`)
 
-the css classname of the listitem while it contains other items and is not expanded
+The css classname of the listitem while it contains other items and is not expanded
 
 * * *
 
 **expandedClass** (defaults: `"tdd-expanded"`)
 
-the css classname of the listitem while it contains other items and is expanded
+The css classname of the listitem while it contains other items and is expanded
 
 * * *
 
@@ -50,13 +50,13 @@ the css classname of the marker while it is indicating that the draggable should
 
 **beforeClass** (defaults: `"tdd-before"`)
 
-the css classname of the marker while it is indicating that the draggable should be dropped before an other listitem
+The css classname of the marker while it is indicating that the draggable should be dropped before an other listitem
 
 * * *
 
 **afterClass** (defaults: `"tdd-after"`)
 
-the css classname of the marker while it is indicating that the draggable should be dropped after an other listitem
+The css classname of the marker while it is indicating that the draggable should be dropped after an other listitem
 
 * * *
 
@@ -88,7 +88,7 @@ The marker which indicates where the draggable will be dropped
 
 **attributes** (defaults: `["id", "class"]`)
 
-the attributes of you listitems `<li>` which will be passed to the JSON for updating purposes.
+The attributes of you listitems `<li>` which will be passed to the JSON for updating purposes.
 
 * * *
 
