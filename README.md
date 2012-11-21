@@ -21,22 +21,9 @@ For example:
 Options
 -------
 
+**afterClass** (defaults: `"tdd-after"`)
 
-**selectedClass** (defaults: `"tdd-selected"`)
-
-The css classname of the draggable while it is dragged around
-
-* * *
-
-**collapsedClass** (defaults: `"tdd-collapsed"`)
-
-The css classname of the listitem while it contains other items and is not expanded
-
-* * *
-
-**expandedClass** (defaults: `"tdd-expanded"`)
-
-The css classname of the listitem while it contains other items and is expanded
+The css classname of the marker while it is indicating that the draggable should be dropped after an other listitem
 
 * * *
 
@@ -48,23 +35,21 @@ the css classname of the marker while it is indicating that the draggable should
 
 * * *
 
+**attributes** (defaults: `["id", "class"]`)
+
+The attributes of you listitems `<li>` which will be passed to the JSON for updating purposes.
+
+* * *
+
 **beforeClass** (defaults: `"tdd-before"`)
 
 The css classname of the marker while it is indicating that the draggable should be dropped before an other listitem
 
 * * *
 
-**afterClass** (defaults: `"tdd-after"`)
+**collapsedClass** (defaults: `"tdd-collapsed"`)
 
-The css classname of the marker while it is indicating that the draggable should be dropped after an other listitem
-
-* * *
-
-**inFolderThreshhold** (defaults: `100`)
-
-The extra indent for the marker to indicate weather the draggable is dropped into an listitem or next to it
-
-*Is not completly implemented yet*
+The css classname of the listitem while it contains other items and is not expanded
 
 * * *
 
@@ -80,15 +65,9 @@ The container in which the draggable representaion will be palced, while beeing 
 
 * * *
 
-**marker** (defaults: `$('<div />')`)
+**expandedClass** (defaults: `"tdd-expanded"`)
 
-The marker which indicates where the draggable will be dropped
-
-* * *
-
-**attributes** (defaults: `["id", "class"]`)
-
-The attributes of you listitems `<li>` which will be passed to the JSON for updating purposes.
+The css classname of the listitem while it contains other items and is expanded
 
 * * *
 
@@ -97,6 +76,26 @@ The attributes of you listitems `<li>` which will be passed to the JSON for upda
 Url, to retrieve a JSON. A tree will be constructed from that JSON. 
 
 *Is not implemented yet.*
+
+* * *
+
+**inFolderThreshhold** (defaults: `100`)
+
+The extra indent for the marker to indicate weather the draggable is dropped into an listitem or next to it
+
+*Is not completly implemented yet*
+
+* * *
+
+**marker** (defaults: `$('<div />')`)
+
+The marker which indicates where the draggable will be dropped
+
+* * *
+
+**selectedClass** (defaults: `"tdd-selected"`)
+
+The css classname of the draggable while it is dragged around
 
 * * *
 
