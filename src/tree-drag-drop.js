@@ -16,9 +16,9 @@ if (typeof String.prototype.trim !== 'function') {
 			selectedClass: "tdd-selected",
 			collapsedClass: "tdd-collapsed",
 			expandedClass: "tdd-expanded",
-			appendClass: "tdd-append", 
 			beforeClass: "tdd-before", 
 			afterClass: "tdd-after",
+			cursorGrabbingUrl: null,
 			inFolderThreshhold: 100,
 			cursorAt: {left: 10, top: -40}, 
 			dragContainer: $('<div class="tdd-dragContainer" />'),			
@@ -96,10 +96,14 @@ if (typeof String.prototype.trim !== 'function') {
 				
 		handleDraggableStart: function (e, o) {			
 			debug("handleDraggableStart");	
+			var options = getOptions($(e.target)),
+				ctx = getContext($(e.target));			
 			$(e.target).addClass(getOptions($(e.target)).selectedClass);
 			document.onmousemove = function () {
 				return false;
 			};	
+			
+			$("body").css("cursor", "url(" + options.cursorGrabbingUrl +") , move").addClass("cursorGrabbing");
 		},
 		
 		handleDraggableDrag: function (e, o) {
@@ -119,7 +123,7 @@ if (typeof String.prototype.trim !== 'function') {
 			debug("handleDraggableStop: sendTree");
 			sendTree(tree, options.updateUrl);
 			
-			
+			$("body").removeClass("cursorGrabbing").css("cursor", "auto");
 		},
 		
 		handleDroppableOut: function (e, o) {
@@ -130,7 +134,6 @@ if (typeof String.prototype.trim !== 'function') {
 			debug("handleDroppableOver");
 			var	options = getOptions($(e.target)),
 				selectedClass = options.selectedClass,
-				appendClass = options.appendClass, 
 				beforeClass = options.beforeClass,
 				afterClass = options.afterClass,
 				marker = options.marker;		
@@ -151,7 +154,7 @@ if (typeof String.prototype.trim !== 'function') {
 						threshhold = Math.min(options.inFolderThreshhold * (target.find("ul").length + 1), target.width() * 0.75);
 					}
 					
-					marker.removeClass(appendClass, beforeClass, afterClass);
+					marker.removeClass(beforeClass, afterClass);
 										
 					// prevent dropping items in itself
 					if (target.hasClass(selectedClass) || target.parents("." + selectedClass).length !== 0 || target.parents(".tdd-trashbin").length !== 0) {
@@ -183,7 +186,7 @@ if (typeof String.prototype.trim !== 'function') {
 			//} else if ($(e.target).hasClass("tdd-tree")/* && $(".tdd-tree").children().length === 0 */) {
 			} else if ($(e.target).hasClass("tdd-tree")) {
 				debug("tree");
-				marker.removeClass(appendClass, beforeClass, afterClass);
+				marker.removeClass(beforeClass, afterClass);
 				marker.addClass(beforeClass);
 				$(e.target).append(marker);
 			} else if ($(e.target).hasClass("tdd-trashbin")) {
@@ -329,5 +332,7 @@ if (typeof String.prototype.trim !== 'function') {
 	
 }(jQuery));
 
-$('.treeDragDrop').treeDragDrop({}); 
+$('.treeDragDrop').treeDragDrop({
+	cursorGrabbingUrl: "../src/css/cursorGrabbing.png"
+}); 
 
