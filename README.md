@@ -27,14 +27,6 @@ The css classname of the marker while it is indicating that the draggable should
 
 * * *
 
-**appendClass** (defaults: `"tdd-append"`)
-
-the css classname of the marker while it is indicating that the draggable should be dropped into an other listitem
-
-*Is not completly  implemented yet*
-
-* * *
-
 **attributes** (defaults: `["id", "class"]`)
 
 The attributes of you listitems `<li>` which will be passed to the JSON for updating purposes.
@@ -82,8 +74,6 @@ Url, to retrieve a JSON. A tree will be constructed from that JSON.
 **inFolderThreshhold** (defaults: `100`)
 
 The extra indent for the marker to indicate weather the draggable is dropped into an listitem or next to it
-
-*Is not completly implemented yet*
 
 * * *
 
