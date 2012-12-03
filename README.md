@@ -3,6 +3,10 @@ tree-drag-drop
 
 A drag and drop tree control depending on jQuery and jQuery ui
 
+See an example:
+http://treedragdrop.die-symbionten.de/docs/example_1.html
+
+
 Usage
 -----
 
