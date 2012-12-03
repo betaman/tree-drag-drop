@@ -78,8 +78,7 @@ if (typeof String.prototype.trim !== 'function') {
 		var ajaxData, 
 			treeData = serializeTree(tree);
 		
-		debug(treeData)
-		
+		debug(treeData);		
 		if (updateUrl !== null) {
 			ajaxData = {tree: treeData};
 			$.post(updateUrl, ajaxData, function (res) {
@@ -96,14 +95,13 @@ if (typeof String.prototype.trim !== 'function') {
 				
 		handleDraggableStart: function (e, o) {			
 			debug("handleDraggableStart");	
-			var options = getOptions($(e.target)),
-				ctx = getContext($(e.target));			
+			var options = getOptions($(e.target));			
 			$(e.target).addClass(getOptions($(e.target)).selectedClass);
 			document.onmousemove = function () {
 				return false;
 			};	
 			
-			$("body").css("cursor", "url(" + options.cursorGrabbingUrl +") , move").addClass("cursorGrabbing");
+			$("body").css("cursor", "url(" + options.cursorGrabbingUrl + ") , move").addClass("cursorGrabbing");
 		},
 		
 		handleDraggableDrag: function (e, o) {
@@ -157,8 +155,10 @@ if (typeof String.prototype.trim !== 'function') {
 					marker.removeClass(beforeClass, afterClass);
 										
 					// prevent dropping items in itself
-					if (target.hasClass(selectedClass) || target.parents("." + selectedClass).length !== 0 || target.parents(".tdd-trashbin").length !== 0) {
+					if (target.hasClass(selectedClass) || target.parents("." + selectedClass).length !== 0) {
 						marker.detach();
+					} else if (target.parents(".tdd-trashbin").length !== 0) {						
+						target.parents(".tdd-trashbin").append(marker);						
 					} else {
 						// append to item
 						if (x > threshhold) {							
@@ -191,7 +191,7 @@ if (typeof String.prototype.trim !== 'function') {
 				$(e.target).append(marker);
 			} else if ($(e.target).hasClass("tdd-trashbin")) {
 				debug("trashbin");
-				marker.detach();
+				$(e.target).append(marker);
 			}
 			
 			//e.stopImmediatePropagation();		
@@ -332,7 +332,10 @@ if (typeof String.prototype.trim !== 'function') {
 	
 }(jQuery));
 
-$('.treeDragDrop').treeDragDrop({
-	cursorGrabbingUrl: "../src/css/cursorGrabbing.png"
-}); 
 
+$('.treeDragDrop').treeDragDrop({
+	collapsedClass: "icon-folder-close", 
+	expandedClass: "icon-folder-open", 
+	updateUrl: "/navigation/api/update",
+	cursorGrabbingUrl: ($.browser.msie) ? "/apps/navigation/js/tree-drag-drop/css/closedhand.cur" : "/apps/navigation/js/tree-drag-drop/css/cursorGrabbing.png"
+});
