@@ -332,10 +332,3 @@ if (typeof String.prototype.trim !== 'function') {
 	
 }(jQuery));
 
-
-$('.treeDragDrop').treeDragDrop({
-	collapsedClass: "icon-folder-close", 
-	expandedClass: "icon-folder-open", 
-	updateUrl: "/navigation/api/update",
-	cursorGrabbingUrl: ($.browser.msie) ? "/apps/navigation/js/tree-drag-drop/css/closedhand.cur" : "/apps/navigation/js/tree-drag-drop/css/cursorGrabbing.png"
-});
