@@ -52,11 +52,11 @@ body:not(.cursorGrabbing) .treeDragDrop li, .tdd-dragContainer li{
 
 
 .treeDragDrop li.tdd-collapsed{
-	background: url(collapsed.png) no-repeat 8px 10px;
+	background: url(collapsed.png) no-repeat 6px 11px;
 }
 
 .treeDragDrop li.tdd-expanded{
-	background: url(expanded.png) no-repeat 8px 10px;
+	background: url(expanded.png) no-repeat 6px 11px;
 }
 
 .treeDragDrop .tdd-after, .treeDragDrop .tdd-before, .treeDragDrop .tdd-append{
